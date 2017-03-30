@@ -11,8 +11,8 @@ upstream {{$upstream}} {
 }
 {{end}}
 
-proxy_cache_path /data/nginx/cache levels=2:2 keys_zone=assets_cache:32m inactive=3d max_size=4G;
-proxy_temp_path /data/nginx/cache-tmp 2 2;
+proxy_cache_path /cache/nginx/assets levels=2:2 keys_zone=assets_cache:32m inactive=3d max_size=4G;
+proxy_temp_path /cache/nginx/assets-tmp 2 2;
 proxy_cache_key $host$request_uri;
 proxy_cache_valid 30d;
 

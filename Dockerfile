@@ -156,7 +156,7 @@ COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY consul-nginx.ctmpl /etc/consul/consul-nginx.ctmpl
 
-VOLUME ["/data/nginx"]
+VOLUME ["/cache/nginx"]
 
 EXPOSE 80
 
