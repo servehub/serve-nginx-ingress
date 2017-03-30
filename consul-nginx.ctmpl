@@ -1,0 +1,76 @@
+{{- range services}}{{range service .Name}}{{end}}{{end -}}
+{{- range ls "services/routes"}}{{end -}}
+
+{{- with $data := plugin "/usr/local/bin/serve-tools" "consul" "nginx-template-context" | parseJSON}}
+
+{{range $upstream, $addresses := $data.upstreams}}
+upstream {{$upstream}} {
+  {{- range $addr := $addresses}}
+    server {{$addr.address}}:{{$addr.port}} max_fails=8 fail_timeout=5s;
+  {{- end}}
+}
+{{end}}
+
+proxy_cache_path /data/nginx/cache levels=2:2 keys_zone=assets_cache:32m inactive=3d max_size=4G;
+proxy_temp_path /data/nginx/cache-tmp 2 2;
+proxy_cache_key $host$request_uri;
+proxy_cache_valid 30d;
+
+{{range $host, $locations := $data.services}}
+server {
+  listen 80;
+  server_name {{$host}};
+
+  root /var/www-data/not-exists;
+
+  set $proxy_cache_expires 'off';
+  set $proxy_pass_cache_zone 'off';
+
+  {{range $location, $routeStages := $locations}}
+    location {{$location}} {
+      set $proxy_pass_host $host;
+      set $proxy_pass_upstream '';
+
+      {{range $i, $route := $routeStages}}
+        {{if not (eq $route.routeValues "-")}}
+        set $route_values '{{$route.routeKeys}}';
+        if ($route_values = '{{$route.routeValues}}') {
+        {{end}}
+          {{if $route.staticHost -}}
+            set $proxy_pass_host '{{$route.staticHost}}';
+          {{end}}
+
+          set $proxy_pass_upstream '{{$route.upstream}}';
+
+        {{if not (eq $route.routeValues "-")}} } {{end}}
+      {{end}}
+
+      expires $proxy_cache_expires;
+
+      proxy_http_version 1.1;
+      proxy_set_header   Upgrade $http_upgrade;
+      proxy_set_header   Connection $http_connection;
+      proxy_set_header   X-Original-Host $host;
+      proxy_set_header   X-Original-Scheme $scheme;
+      proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header   Accept-Encoding '';
+
+      if ($proxy_pass_upstream = '') {
+        return 404;
+      }
+
+      proxy_cache $proxy_pass_cache_zone;
+
+      proxy_set_header Host $proxy_pass_host;
+      proxy_pass http://$proxy_pass_upstream;
+    }
+  {{end}}
+
+  location /-/ {
+    set $proxy_cache_expires '30d';
+    set $proxy_pass_cache_zone 'assets_cache';
+    rewrite ^/-/(?<url>.+) /$url;
+  }
+}
+{{end}}
+{{- end}}
