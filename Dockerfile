@@ -150,14 +150,16 @@ RUN apk add --no-cache bash supervisor
 COPY bin/consul-template /usr/local/bin/consul-template
 COPY bin/serve-tools /usr/local/bin/serve-tools
 
+ENV CONSUL_HTTP_ADDR "127.0.0.1:8500"
+
+VOLUME ["/cache/nginx"]
+
+EXPOSE 80
+
 COPY prometheus.lua /etc/nginx/prometheus.lua
 COPY consul-template.conf /etc/consul/consul-template.conf
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY consul-nginx.ctmpl /etc/consul/consul-nginx.ctmpl
-
-VOLUME ["/cache/nginx"]
-
-EXPOSE 80
 
 CMD ["/usr/bin/supervisord", "--nodaemon", "-c", "/etc/supervisor/supervisord.conf"]
