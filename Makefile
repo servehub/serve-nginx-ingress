@@ -1,4 +1,4 @@
-VERSION?="1.0.3"
+VERSION?="1.0.4"
 TAG="servehub/serve-nginx-ingress"
 
 release:
