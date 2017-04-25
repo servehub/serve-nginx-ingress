@@ -1,4 +1,4 @@
-VERSION?="1.0.4"
+VERSION?=$$(git describe --tags --abbrev=0)
 TAG="servehub/serve-nginx-ingress"
 
 release:

@@ -1,0 +1,19 @@
+sudo: required
+
+services:
+  - docker
+
+branches:
+  only:
+    - /^v[\d\.]+$/
+
+env:
+  global:
+    - secure: "rseFJOrx14PK7w6n8KjVp5WLhy9BQ4pwr5VAWjw/35biRMCQF5d5JN1lHpsgp/GrCZ/RT8dSJ5zyUbVot85Rq/mFxhwBOGHZbgtz1lTvXjPmNIWgyIhqMJq+rzdDyNP1SWkSYm4Vwerzxp6V+UfjQrQs/y4KmTukTiruQZSVimGLRV20eQft2jFcVS920FxE0i5O7eI/8clW51JWXB5Htf5ChouUwC6cIXpoa5WyS/9ZslfVhwX31CoIzZgw3z9YePbXDhOh+g8raS8T1qCiBduWzf4hc0fr2bzG4yBZkEqONX5fKDIuwlIM93sCH5t+4K33lA0h01zwfA/BN+iHcImiyQufYq+IXkDW2YF7UlHWm4/feBEW7c+QAJvFQr0L/4kD13lQoxYHkN01PpN8/+ZitnrvlZ9IFe+Fpi36HyuQt+ooonVl140HfDY6EssopR36dYqaYzMnG+Sq2594Z5Va3UrRc0BXCytMPaiuO/j73fx+2UvhowY4kDsx0kti6A7HA7dVeEXGI+OUuZzcbtRfp13zeGeJqFR4l7xVnsKHg80pDLekIatKZGJ93INPktUTYrvpL2VMdfDkNutnUHSRFiueNDi+Xr/UD1ufVIiMvUsiSAHuuoa5s2O14BBldGGC4boHoXHnLytdCW5rWM4uX/t9OqM4ZsuF0XdDOG0="
+    - secure: "jcbSQzJxQyAaDrIL6HL/kDuZ0aa9BuVs2Kfu+mR5cAq+pqyoCLpLxOfqItpw2M2Jj0mCjMmbXnF/UpoVB5dGts3DUY4AgLV1MRoxjA25rT+GpU2dcVq+QiPTc1H4jzGq8giN88NXDDSAW90Qp4xdd5k/eL8i02j8O+bR7oF0bjuKX52MwQ4TJt4N/2co1AEMWmLIn0IRXh7Jfc7CIB9wmBOSJO7iwVxRmPWZY71bphhDhHfVGt5OD5TwSZ8QRWTlISylRleyxuI4sCB1bmBiSbu2OMRI/M9Xasf+IQqUQaFvu+hbWkvizB1nuxERx0/qZQowqwn0nCpFPbIYaH0bzTDsmkQGN5NmJCzcOzJvKEHsy7Fpt9X5UIkTUTPhFKmZ4UtCi6wlH3KUD869t8nQ6JuYCsQnKgWTSG/OjA/H8A2ovLsR3r9uTAbr/wvlm0ufGjsf843pglKj6bjbVs7jicA+X++u+tAljxBoOZCoR6ZQdcO8WgBwd9BATkhKPXHfXVyyhjLip4qCBp/G4MTDye/CcNuA6NT3QAV6TvmyHfQXAMcmdfh/3i1u9RwdRJAtvpqEcYOO7CMwgiWqKAEgUsz60L3zIRwbYjW9Fy6AseJaI3qQ8EBdDBGbPSvlnIIuEARL/r1M+vycQAUQ6kLXfSj/IexDkR+HIOsuQ4gn/yU="
+
+script:
+  - export VERSION="${TRAVIS_TAG//v/}"
+  - docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
+  - make release
+  - docker logout
