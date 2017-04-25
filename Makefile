@@ -1,4 +1,4 @@
-VERSION?=$$(git describe --tags --abbrev=0)
+VERSION?=$$(git describe --tags --abbrev=0 | sed 's/v//')
 TAG="servehub/serve-nginx-ingress"
 
 release:
