@@ -3,6 +3,10 @@ sudo: required
 services:
   - docker
 
+branches:
+  only:
+    - /^v[\d\.]+$/
+
 env:
   global:
     - secure: "rseFJOrx14PK7w6n8KjVp5WLhy9BQ4pwr5VAWjw/35biRMCQF5d5JN1lHpsgp/GrCZ/RT8dSJ5zyUbVot85Rq/mFxhwBOGHZbgtz1lTvXjPmNIWgyIhqMJq+rzdDyNP1SWkSYm4Vwerzxp6V+UfjQrQs/y4KmTukTiruQZSVimGLRV20eQft2jFcVS920FxE0i5O7eI/8clW51JWXB5Htf5ChouUwC6cIXpoa5WyS/9ZslfVhwX31CoIzZgw3z9YePbXDhOh+g8raS8T1qCiBduWzf4hc0fr2bzG4yBZkEqONX5fKDIuwlIM93sCH5t+4K33lA0h01zwfA/BN+iHcImiyQufYq+IXkDW2YF7UlHWm4/feBEW7c+QAJvFQr0L/4kD13lQoxYHkN01PpN8/+ZitnrvlZ9IFe+Fpi36HyuQt+ooonVl140HfDY6EssopR36dYqaYzMnG+Sq2594Z5Va3UrRc0BXCytMPaiuO/j73fx+2UvhowY4kDsx0kti6A7HA7dVeEXGI+OUuZzcbtRfp13zeGeJqFR4l7xVnsKHg80pDLekIatKZGJ93INPktUTYrvpL2VMdfDkNutnUHSRFiueNDi+Xr/UD1ufVIiMvUsiSAHuuoa5s2O14BBldGGC4boHoXHnLytdCW5rWM4uX/t9OqM4ZsuF0XdDOG0="
