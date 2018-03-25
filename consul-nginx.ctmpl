@@ -11,8 +11,9 @@ upstream {{$upstream}} {
 }
 {{end}}
 
-proxy_cache_path /cache/nginx/assets levels=2:2 keys_zone=assets_cache:32m inactive=3d max_size=4G;
-proxy_temp_path /cache/nginx/assets-tmp 2 2;
+proxy_cache_path /cache/nginx/upstream levels=2:2 keys_zone=upstream_cache:32m inactive=3d max_size=4G;
+proxy_temp_path /cache/nginx/cache-tmp 2 2;
+proxy_cache_use_stale error timeout invalid_header http_502 http_503 http_504;
 proxy_cache_key $host$request_uri;
 proxy_cache_valid 30d;
 
@@ -59,7 +60,21 @@ server {
         return 404;
       }
 
-      proxy_cache $proxy_pass_cache_zone;
+      {{ $cache := (index $routeStages 0).cache }}
+
+      {{if $cache}}
+        # cached upstream
+        proxy_cache 'upstream_cache';
+
+        {{if $cache.key}}
+          proxy_cache_key '{{$cache.key}}';
+        {{end}}
+        {{if $cache.valid}}
+          proxy_cache_valid '{{$cache.valid}}';
+        {{end}}
+      {{else}}
+        proxy_cache $proxy_pass_cache_zone;
+      {{end}}
 
       proxy_set_header Host $proxy_pass_host;
       proxy_pass http://$proxy_pass_upstream;
@@ -68,7 +83,7 @@ server {
 
   location /-/ {
     set $proxy_cache_expires '30d';
-    set $proxy_pass_cache_zone 'assets_cache';
+    set $proxy_pass_cache_zone 'upstream_cache';
     rewrite ^/-/(?<url>.+) /$url;
   }
 }
