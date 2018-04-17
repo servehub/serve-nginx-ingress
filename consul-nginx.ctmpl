@@ -1,7 +1,7 @@
 {{- range services}}{{range service .Name}}{{end}}{{end -}}
 {{- range ls "services/routes"}}{{end -}}
 
-{{- with $data := plugin "/usr/local/bin/serve-tools" "consul" "nginx-template-context" | parseJSON}}
+{{- with $data := plugin "/usr/local/bin/serve-tools" "consul" "nginx-template-context" (env "SERVE_ROUTE_FILTERS")  | parseJSON}}
 
 {{range $upstream, $addresses := $data.upstreams}}
 upstream {{$upstream}} {
@@ -76,6 +76,8 @@ server {
       {{else}}
         proxy_cache $proxy_pass_cache_zone;
       {{end}}
+
+      {{ (index $routeStages 0).extra }}
 
       proxy_set_header Host $proxy_pass_host;
       proxy_pass http://$proxy_pass_upstream;
