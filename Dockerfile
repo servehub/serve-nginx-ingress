@@ -147,7 +147,12 @@ RUN apk add --no-cache bash supervisor
 
 COPY bin/consul-template /usr/local/bin/consul-template
 COPY bin/serve-tools /usr/local/bin/serve-tools
+COPY entrypoint.sh /usr/bin/entrypoint.sh
 
+ENTRYPOINT ["/usr/bin/entrypoint.sh"]
+
+ENV NGINX_LISTEN_PORT "80"
+ENV SERVE_ROUTE_FILTERS ""
 ENV CONSUL_HTTP_ADDR "127.0.0.1:8500"
 
 VOLUME ["/cache/nginx"]
