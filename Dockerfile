@@ -11,10 +11,13 @@ ENV NGINX_LISTEN_PORT "80"
 ENV SERVE_ROUTE_FILTERS ""
 ENV CONSUL_HTTP_ADDR "127.0.0.1:8500"
 
+ENTRYPOINT ["/run/entrypoint.sh"]
+
 VOLUME ["/cache/nginx"]
 
 EXPOSE 80
 
+COPY entrypoint.sh /run/entrypoint.sh
 COPY consul-template.conf /etc/consul/consul-template.conf
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY nginx.conf /etc/nginx/nginx.conf
