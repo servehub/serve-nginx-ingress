@@ -29,6 +29,8 @@ server {
   set $proxy_pass_cache_zone 'off';
 
   {{range $location, $routeStages := $locations}}
+    {{ (index $routeStages 0).extra }}
+
     location {{$location}} {
       set $proxy_pass_host $host;
       set $proxy_pass_upstream '';
@@ -76,8 +78,6 @@ server {
       {{else}}
         proxy_cache $proxy_pass_cache_zone;
       {{end}}
-
-      {{ (index $routeStages 0).extra }}
 
       proxy_set_header Host $proxy_pass_host;
       proxy_pass http://$proxy_pass_upstream;
