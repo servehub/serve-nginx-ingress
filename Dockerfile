@@ -8,6 +8,7 @@ COPY bin/serve-tools /usr/local/bin/serve-tools
 RUN rm -rf /etc/nginx/conf.d/*
 
 ENV NGINX_LISTEN_PORT "80"
+ENV NGINX_SSL_PORT "443"
 ENV SERVE_ROUTE_FILTERS ""
 ENV CONSUL_HTTP_ADDR "127.0.0.1:8500"
 
