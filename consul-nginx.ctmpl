@@ -28,9 +28,16 @@ server {
   set $proxy_cache_expires 'off';
   set $proxy_pass_cache_zone 'off';
 
-  set $ssl_port {{env "NGINX_SSL_PORT"}};
-
   {{range $location, $routeStages := $locations}}
+
+    {{ $ssl := (index $routeStages 0).ssl }}
+    {{if $ssl}}
+      ssl on;
+      listen {{env "NGINX_SSL_PORT"}} ssl;
+      ssl_certificate {{$ssl.cert}};
+      ssl_certificate_key {{$ssl.key}};
+    {{end}}
+
     {{ (index $routeStages 0).extra }}
 
     location {{$location}} {
