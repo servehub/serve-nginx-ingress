@@ -1,6 +1,6 @@
-FROM nginx:1.12-alpine
+FROM nginx:stable-alpine
 
-RUN apk add --no-cache bash supervisor
+RUN apk add --update --no-cache bash supervisor tzdata openssl
 
 COPY bin/consul-template /usr/local/bin/consul-template
 COPY bin/serve-tools /usr/local/bin/serve-tools
@@ -11,12 +11,11 @@ ENV NGINX_LISTEN_PORT "80"
 ENV NGINX_SSL_PORT "443"
 ENV SERVE_ROUTE_FILTERS ""
 ENV CONSUL_HTTP_ADDR "127.0.0.1:8500"
+ENV TIMEZONE "UTC"
 
 ENTRYPOINT ["/run/entrypoint.sh"]
 
-VOLUME ["/cache/nginx"]
-
-EXPOSE 80
+VOLUME ["/cache/nginx", "/etc/nginx/include.d", "/etc/nginx/ssl"]
 
 COPY entrypoint.sh /run/entrypoint.sh
 COPY consul-template.conf /etc/consul/consul-template.conf

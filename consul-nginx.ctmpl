@@ -30,12 +30,17 @@ server {
 
   {{range $location, $routeStages := $locations}}
 
-    {{ $ssl := (index $routeStages 0).ssl }}
+    {{$ssl := (index $routeStages 0).ssl}}
     {{if $ssl}}
       ssl on;
       listen {{env "NGINX_SSL_PORT"}} ssl;
-      ssl_certificate {{$ssl.cert}};
-      ssl_certificate_key {{$ssl.key}};
+
+      ssl_certificate '{{$ssl.cert}}';
+      ssl_certificate_key '{{$ssl.key}}';
+
+      {{if $ssl.trustedCert}}
+        ssl_trusted_certificate '{{$ssl.trustedCert}}';
+      {{end}}
     {{end}}
 
     {{ (index $routeStages 0).extra }}
