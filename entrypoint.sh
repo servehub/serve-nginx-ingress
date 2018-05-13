@@ -1,6 +1,7 @@
 #!/bin/bash -ex
 
 sed -i -- 's/NGINX_LISTEN_PORT/'${NGINX_LISTEN_PORT}'/g' /etc/nginx/nginx.conf
+sed -i -- 's/NGINX_SSL_PORT/'${NGINX_SSL_PORT}'/g' /etc/nginx/nginx.conf
 
 cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
 echo ${TIMEZONE} > /etc/timezone

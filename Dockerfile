@@ -17,6 +17,7 @@ ENTRYPOINT ["/run/entrypoint.sh"]
 
 VOLUME ["/cache/nginx", "/etc/nginx/include.d", "/etc/nginx/ssl"]
 
+COPY default-ssl.crt default-ssl.key /etc/nginx/
 COPY entrypoint.sh /run/entrypoint.sh
 COPY consul-template.conf /etc/consul/consul-template.conf
 COPY supervisord.conf /etc/supervisor/supervisord.conf
