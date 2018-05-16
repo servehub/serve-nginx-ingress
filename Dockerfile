@@ -15,13 +15,13 @@ ENV TIMEZONE "UTC"
 
 ENTRYPOINT ["/run/entrypoint.sh"]
 
-VOLUME ["/cache/nginx", "/etc/nginx/include.d", "/etc/nginx/ssl"]
+VOLUME ["/cache/nginx", "/etc/nginx/include.d", "/etc/nginx/conf.d", "/etc/nginx/ssl"]
 
 COPY default-ssl.crt default-ssl.key /etc/nginx/
 COPY entrypoint.sh /run/entrypoint.sh
 COPY consul-template.conf /etc/consul/consul-template.conf
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY consul-nginx.ctmpl /etc/consul/consul-nginx.ctmpl
+COPY consul-sites.ctmpl /etc/consul/consul-sites.ctmpl
 
 CMD ["/usr/bin/supervisord", "--nodaemon", "-c", "/etc/supervisor/supervisord.conf"]
