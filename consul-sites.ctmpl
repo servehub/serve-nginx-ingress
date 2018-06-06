@@ -38,11 +38,11 @@ server {
       ssl_certificate_key '{{$ssl.key}}';
     {{end}}
 
-    {{ (index $routeStages 0).extra }}
-
     location {{$location}} {
       set $proxy_pass_host $host;
       set $proxy_pass_upstream '';
+
+      {{ (index $routeStages 0).extra }}
 
       {{range $i, $route := $routeStages}}
         {{if not (eq $route.routeValues "-")}}
