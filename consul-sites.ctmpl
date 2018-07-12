@@ -11,7 +11,7 @@ upstream {{$upstream}} {
 }
 {{end}}
 
-proxy_cache_path /cache/nginx/upstream levels=2:2 keys_zone=upstream_cache:32m inactive=3d max_size=4G;
+proxy_cache_path /cache/nginx/upstream levels=2:2 keys_zone=upstream_cache:128m inactive=3d max_size=4G;
 proxy_temp_path /cache/nginx/cache-tmp 2 2;
 proxy_ignore_headers Cache-Control;
 proxy_cache_use_stale error timeout invalid_header http_502 http_503 http_504;
