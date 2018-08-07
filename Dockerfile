@@ -15,7 +15,7 @@ ENV TIMEZONE "UTC"
 
 ENTRYPOINT ["/run/entrypoint.sh"]
 
-VOLUME ["/cache/nginx", "/etc/nginx/include.d", "/etc/nginx/conf.d", "/etc/nginx/ssl"]
+VOLUME ["/cache/nginx", "/etc/nginx/include.d", "/etc/nginx/conf.d", "/etc/nginx/ssl", "/var/cache/nginx/"]
 
 COPY default-ssl.crt default-ssl.key /etc/nginx/
 COPY entrypoint.sh /run/entrypoint.sh

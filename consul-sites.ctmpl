@@ -30,6 +30,8 @@ server {
 
   {{range $location, $routeStages := $locations}}
 
+    {{$params := (index $routeStages 0).params}}
+
     {{$ssl := (index $routeStages 0).ssl}}
     {{if $ssl}}
       ssl on;
@@ -42,7 +44,11 @@ server {
       set $proxy_pass_host $host;
       set $proxy_pass_upstream '';
 
-      {{ (index $routeStages 0).extra }}
+      {{if $params.redirectHttps }}
+      if ($http_x_forwarded_proto = 'http') {
+        return 301 https://$server_name$request_uri;
+      }
+      {{end}}
 
       {{range $i, $route := $routeStages}}
         {{if not (eq $route.routeValues "-")}}
@@ -89,7 +95,14 @@ server {
       {{end}}
 
       proxy_set_header Host $proxy_pass_host;
-      proxy_pass http://$proxy_pass_upstream;
+
+      {{ (index $routeStages 0).extra }}
+
+      {{ if $params.stripPrefix }}
+        proxy_pass http://$proxy_pass_upstream/;
+      {{ else }}
+        proxy_pass http://$proxy_pass_upstream;
+      {{ end }}
     }
   {{end}}
 
