@@ -42,10 +42,15 @@ server {
 
     location {{$location}} {
       set $proxy_pass_host $host;
+      set $proxy_pass_scheme $scheme;
       set $proxy_pass_upstream '';
 
+      if ($http_x_forwarded_proto) {
+        set $proxy_pass_scheme $http_x_forwarded_proto;
+      }
+
       {{if $params.redirectHttps }}
-      if ($http_x_forwarded_proto = 'http') {
+      if ($proxy_pass_scheme = 'http') {
         return 301 https://$server_name$request_uri;
       }
       {{end}}
@@ -72,6 +77,7 @@ server {
       proxy_set_header   X-Original-Host $host;
       proxy_set_header   X-Original-Scheme $scheme;
       proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header   X-Forwarded-Proto $proxy_pass_scheme;
       proxy_set_header   Accept-Encoding '';
 
       if ($proxy_pass_upstream = '') {
