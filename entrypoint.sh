@@ -1,8 +1,13 @@
 #!/bin/bash -ex
 
-find /etc/nginx/ -name "*.conf" -type f -exec sed -i -- 's/NGINX_LISTEN_PORT/'${NGINX_LISTEN_PORT}'/g' {} \;
-find /etc/nginx/ -name "*.conf" -type f -exec sed -i -- 's/NGINX_SSL_PORT/'${NGINX_SSL_PORT}'/g' {} \;
-find /etc/nginx/ -name "*.conf" -type f -exec sed -i -- 's/NGINX_ACCESS_LOG/'${NGINX_ACCESS_LOG}'/g' {} \;
+function replace_conf {
+  find /etc/nginx/ -name "*.conf" -type f -exec sed -i -- "s/$(echo $1 | sed -e 's/\([[\/.*]\|\]\)/\\&/g')/$(echo ${!1} | sed -e 's/[\/&]/\\&/g')/g" {} \;
+}
+
+replace_conf NGINX_LISTEN_PORT
+replace_conf NGINX_SSL_PORT
+replace_conf NGINX_ACCESS_LOG
+
 
 cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
 echo ${TIMEZONE} > /etc/timezone
