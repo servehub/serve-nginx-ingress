@@ -2,6 +2,7 @@
 
 find /etc/nginx/ -name "*.conf" -type f -exec sed -i -- 's/NGINX_LISTEN_PORT/'${NGINX_LISTEN_PORT}'/g' {} \;
 find /etc/nginx/ -name "*.conf" -type f -exec sed -i -- 's/NGINX_SSL_PORT/'${NGINX_SSL_PORT}'/g' {} \;
+find /etc/nginx/ -name "*.conf" -type f -exec sed -i -- 's/NGINX_ACCESS_LOG/'${NGINX_ACCESS_LOG}'/g' {} \;
 
 cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
 echo ${TIMEZONE} > /etc/timezone
