@@ -7,6 +7,7 @@ function replace_conf {
 replace_conf NGINX_LISTEN_PORT
 replace_conf NGINX_SSL_PORT
 replace_conf NGINX_ACCESS_LOG
+replace_conf NGINX_STAGING_IP
 
 
 cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
