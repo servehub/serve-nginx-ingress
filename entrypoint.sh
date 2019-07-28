@@ -19,7 +19,7 @@ mkdir -p /etc/nginx/ssl
 if [ ! -f /etc/nginx/ssl/dhparams.pem ]; then
   echo "make dhparams"
   pushd /etc/nginx/ssl
-  openssl dhparam -out dhparams.pem 2048
+  openssl dhparam -out dhparams.pem 4096
   chmod 600 dhparams.pem
   popd
 fi

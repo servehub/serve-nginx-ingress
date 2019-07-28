@@ -1,6 +1,10 @@
-FROM nginx:stable-alpine
+FROM nginx:mainline-alpine
 
-RUN apk add --update --no-cache bash supervisor tzdata openssl
+RUN apk add --update --no-cache \
+    bash \
+    supervisor \
+    tzdata \
+    openssl
 
 COPY bin/consul-template /usr/local/bin/consul-template
 COPY bin/serve-tools /usr/local/bin/serve-tools
