@@ -1,4 +1,4 @@
-FROM nginx:mainline-alpine
+FROM nginx:1.17.5-alpine
 
 RUN apk add --update --no-cache \
     bash \
