@@ -1,4 +1,4 @@
-FROM nginx:1.17.5-alpine
+FROM nginx:1.17.8-alpine
 
 RUN apk add --update --no-cache \
     bash \
@@ -29,6 +29,7 @@ COPY entrypoint.sh /run/entrypoint.sh
 COPY consul-template.conf /etc/consul/consul-template.conf
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 COPY nginx.conf /etc/nginx/nginx.conf
+COPY consul-tcp-streams.ctmpl /etc/consul/consul-tcp-streams.ctmpl
 COPY consul-sites.ctmpl /etc/consul/consul-sites.ctmpl
 
 CMD ["/usr/bin/supervisord", "--nodaemon", "-c", "/etc/supervisor/supervisord.conf"]

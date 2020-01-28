@@ -1,0 +1,21 @@
+{{- range services}}{{range service .Name}}{{end}}{{end -}}
+{{- range ls "services/tcp-routes"}}{{end -}}
+
+{{- with $data := plugin "/usr/local/bin/serve-tools" "consul" "nginx-template-tcp-context" (env "SERVE_ROUTE_FILTERS")  | parseJSON}}
+
+{{range $upstream, $addresses := $data.upstreams}}
+upstream {{$upstream}} {
+  {{- range $addr := $addresses}}
+    server {{$addr.address}}:{{$addr.port}} max_fails=3 fail_timeout=10s;
+  {{- end}}
+}
+{{end}}
+
+{{range $port, $data := $data.services}}
+server {
+  listen {{$port}};
+  proxy_pass {{$data.upstream}} {{$data.protocol}};
+}
+{{end}}
+
+{{end}}
