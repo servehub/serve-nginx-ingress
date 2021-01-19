@@ -23,8 +23,10 @@ proxy_cache_lock on;
 
 {{range $host, $locations := $data.services}}
 server {
+  {{$hostParams := (index $data.hostsParams $host)}}
+
   listen {{env "NGINX_LISTEN_PORT"}};
-  server_name {{$host}};
+  server_name {{$host}}{{if $hostParams.hostAliases}} {{$hostParams.hostAliases}}{{end}};
 
   root /var/www-data/not-exists;
 
