@@ -95,7 +95,7 @@ server {
         proxy_cache 'upstream_cache';
 
         {{if $cache.key}}
-          proxy_cache_key '{{$cache.key}}';
+          proxy_cache_key {{$cache.key}};
         {{end}}
         {{if $cache.valid}}
           proxy_cache_valid '{{$cache.valid}}';
