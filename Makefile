@@ -3,7 +3,7 @@ TAG="servehub/serve-nginx-ingress"
 
 build:
 	@echo "==> Build..."
-	docker build -t ${TAG}:latest -t ${TAG}:${VERSION} .
+	docker build --platform linux/amd64 -t ${TAG}:latest -t ${TAG}:${VERSION} .
 
 release: build
 	@echo "==> Publish new docker image..."
