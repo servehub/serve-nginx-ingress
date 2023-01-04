@@ -1,0 +1,11 @@
+info:
+  name: serve-nginx-ingress
+  description: "Nginx ingress"
+  version: "1.0"
+  category: infra
+
+include:
+  - file: /etc/serve/include.d/library.yml
+
+build:
+  - docker-image: {}
