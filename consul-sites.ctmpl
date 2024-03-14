@@ -28,6 +28,8 @@ server {
   listen {{env "NGINX_LISTEN_PORT"}};
   server_name {{$host}}{{if $hostParams.hostAliases}} {{$hostParams.hostAliases}}{{end}};
 
+  http2 on;
+
   root /var/www-data/not-exists;
 
   set $proxy_cache_expires 'off';
@@ -108,11 +110,15 @@ server {
 
       {{ (index $routeStages 0).extra }}
 
-      {{ if $params.stripPrefix }}
-        proxy_pass http://$proxy_pass_upstream/;
-      {{ else }}
-        proxy_pass http://$proxy_pass_upstream;
-      {{ end }}
+      {{if $params.grpc}}
+        grpc_pass grpc://$proxy_pass_upstream;
+      {{else}}
+        {{ if $params.stripPrefix }}
+          proxy_pass http://$proxy_pass_upstream/;
+        {{ else }}
+          proxy_pass http://$proxy_pass_upstream;
+        {{ end }}
+      {{end}}
     }
   {{end}}
 
